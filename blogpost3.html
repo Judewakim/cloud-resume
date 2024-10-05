@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blogpost3 - Jude Wakim</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Blog Post 3: OSPF Network Routing Protocol</h2>
+								<p>In this blogpost, I review Open Shortest Path First Cisco routing protocol. OSPF is a link-state routing protocol used in most switches and routers in modern networks. There are two main types of routing protocols for internal routing (IRP), link-state and distance vector. While technically, OSPF is also considered a distance-vector protocols in between areas, within an area it is a link-state protocol and is categorized in the link-state category. OSPF is the only IRP listed in the Cisco CCNA 200-301 Exam.<br></p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+										<h4 class="major">1. Create-Bucket</h4>
+										<p>This action creates an Amazon S3 bucket.<br><br>The first line (<code>#!/usr/bin/env bash</code>) is called a shebang. [EXPLAIN WHAT A SHEBANG IS]. The next line just prints to the user whats in between the paranthesis. The next line is comment that explain what goes on next (comments start with # and are not run). The next thing is an if statement that basically says if the user does not enter a bucket name after entering the command to run the script then it prints out the echo and exits the script there. Everything from this point on in the script is if the user did enter a bucket name. The next line (<code>BUCKET_NAME=$1</code>) makes a new variable named BUCKET_NAME and sets the value equal to whatever the user put as the bucket name. The last part of this script actually creates the bucket. It uses the bash cli command <code> s3api create-bucket --bucket $BUCKET_NAME</code> to create the bucket using the bucket name that the user entered. So in order to run this bash cli command to create a bucket you are required to include the bucket name. You can also include, as seen here, a query of the region the bucket is in using the flag <code>--query Location</code> and another flag <code>--output text</code> to format the output that comes back to the user once the bucket is created in just regular text format.</p>
+										<h4>full example</h4>
+										<pre><code>
+#!/usr/bin/env bash
+echo "==create bucket"
+
+#Check for bucket name
+if [ -z "$1" ]; then 
+    echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+    exit 1
+fi
+
+BUCKET_NAME=$1
+
+#https://docs.aws.amazon.com/cli/latest/reference/s3api/create-bucket.html
+aws s3api create-bucket  \
+--bucket  $BUCKET_NAME \
+--query Location \
+--output text
+                                    </code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">2. Delete-Bucket</h4>
+										<p>*This action deletes an Amazon S3 bucket.*<br><br>-The first line (<code>#!/usr/bin/env bash</code>) is called a shebang. [EXPLAIN WHAT A SHEBANG IS]. <br>-The next line just prints to the user whats in between the paranthesis. <br>-The next line is comment that explain what goes on next (comments start with # and are not run). <br>-The next thing is an if statement that basically says if the user does not enter a bucket name after entering the command to run the script then it prints out the echo and exits the script there. <br>-Everything from this point on in the script is if the user did enter a bucket name. The next line (<code>BUCKET_NAME=$1</code>) makes a new variable named BUCKET_NAME and sets the value equal to whatever the user put as the bucket name. <br>-The last part of this script actually deletes the bucket. It uses the bash cli command <code> s3api delete-bucket --bucket $BUCKET_NAME</code> to create the bucket using the bucket name that the user entered. So in order to run this bash cli command to create a bucket you are required to include the bucket name. It's extremely similar to the create bucket script and all others.</p>
+										<h4>full example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==delete bucket"
+											
+#Check for bucket name
+if [ -z "$1" ]; then 
+	echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+	exit 1
+fi
+											
+BUCKET_NAME=$1
+											
+#https://docs.aws.amazon.com/cli/latest/reference/s3api/delete-bucket.html
+aws s3api delete-bucket  \
+--bucket  $BUCKET_NAME
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">3. Delete-Objects</h4>
+										<p>*This action deletes objects inside of an S3 bucket. The bash script below lists objects inside the Amazon S3 bucket then deletes them all at once.*<br><br><br>The first line (<code>#!/usr/bin/env bash</code>) is called a shebang. [EXPLAIN WHAT A SHEBANG IS]. <br>The next line just prints to the user whats in between the paranthesis. <br>The next line is comment that explain what goes on next (comments start with # and are not run). <br>The next thing is an if statement that basically says if the user does not enter a bucket name after entering the command to run the script then it prints out the echo and exits the script there. <br>Everything from this point on in the script is if the user did enter a bucket name. The next line (<code>BUCKET_NAME=$1</code>) makes a new variable named BUCKET_NAME and sets the value equal to whatever the user put as the bucket name. <br><br>The last part of this script actually lists then deletes the bucket. It uses the bash cli command <code> s3api list-objects-v2 --bucket $BUCKET_NAME --query Contents[].Key | jq -n {Objects: [inputs | .[] | {Key: .}]}' >/tmp/delete_objects.json</code> to list the objects inside of a bucket using the bucket name that the user entered. So in order to run this bash cli command to list all the objects in a bucket that you are required to include the bucket name and here I also added the query flag to return only the keys of the results. Then that result is piped over to jq, a JSON processor which turns the list of objects into JSON format. jq constructs a JSON object where each key is formatted as needed in order to delete them. That last part with the file path redirects the output of the processed JSON to that location.<br><br>Once the list of objects in the bucket is returned in JSON format then its the API to delete the objects' turn. That API requires a bucket flag and a delete flag. The delete flag provides the file path of the json list.</p>
+										<h4>full example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==delete objects"
+											
+#Exit immediately if any command returns a non-zero status
+set -e
+											
+#Check for bucket name
+if [ -z "$1" ]; then 
+	echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+	exit 1
+fi
+											
+BUCKET_NAME=$1
+											
+aws s3api list-objects-v2 \
+--bucket $BUCKET_NAME \
+--query Contents[].Key \
+| jq -n '{Objects: [inputs | .[] | {Key: .}]}' > /tmp/delete_objects.json
+											
+aws s3api delete-objects \
+--bucket $BUCKET_NAME \
+--delete file:///tmp/delete_objects.json
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">4. Get-Newest-Bucket</h4>
+										<p>*This action returns to the user what the most recently created bucket was.*<br><br> The basic command is <code>aws s3api list-buckets</code>. THe rest of it are pipes. The result of <code>aws s3api list-buckets</code> get piped into <code>jq -r .Buckets</code> which [EXPLAIN JQ]. Then the result of the jq gets piped into <code>sort_by(.CreationDate)</code> which clearly sorts the list by creation date. Then that result gets piped into <code>reverse</code> which reverses the order of the list which makes the list most recent to least recent. Then the result of that gets piped into <code>.[0]</code> which returns only the first value in the list (the most recently created bucket.) Then the result gets piped in <code>.Name</code> which returns only the name of the result and nothing else. After all that piping (can also be viewed as filters) only the name of the most recently created bucket is returned to the user who runs this script.</p>
+										<h4>full example</h4>
+										<pre><code>
+=#!/usr/bin/env bash
+=echo "==list newest bucket"
+											
+=# | .[0:5] | 
+=# add this pipe after the reverse pipe
+=# if you want to list top 5 newest buckets
+=aws s3api list-buckets | jq -r '.Buckets | sort_by(.CreationDate) | reverse | .[0] | .Name'
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">list-buckets</h4>
+										<p>In this blogpost I cover chapter 3 for the Linux Basics for Hackers book, Analyzing and Managing Networks. We use commands like <code>command example</code>. Click the link above to check it out.</p>
+										<h4>Blockquote</h4>
+										<blockquote>Include quote from the chapter.</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code></code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">list-objects</h4>
+										<p>In this blogpost I cover chapter 3 for the Linux Basics for Hackers book, Analyzing and Managing Networks. We use commands like <code>command example</code>. Click the link above to check it out.</p>
+										<h4>Blockquote</h4>
+										<blockquote>Include quote from the chapter.</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code></code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">put-objects</h4>
+										<p>In this blogpost I cover chapter 3 for the Linux Basics for Hackers book, Analyzing and Managing Networks. We use commands like <code>command example</code>. Click the link above to check it out.</p>
+										<h4>Blockquote</h4>
+										<blockquote>Include quote from the chapter.</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code></code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">sync</h4>
+										<p>In this blogpost I cover chapter 3 for the Linux Basics for Hackers book, Analyzing and Managing Networks. We use commands like <code>command example</code>. Click the link above to check it out.</p>
+										<h4>Blockquote</h4>
+										<blockquote>Include quote from the chapter.</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code></code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

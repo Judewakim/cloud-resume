@@ -1,0 +1,321 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cloud Resume</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            width: 100%;
+            text-align: center;
+        }
+        main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p {
+            line-height: 1.6;
+        }
+        #visitor-count {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            fetch('https://t50x28c0s5.execute-api.us-east-1.amazonaws.com/prod/visitor-count')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('API response:', data); // Debugging: Log the response data
+                    if (data.count !== undefined) {
+                        document.getElementById('visitor-count').innerText = data.count;
+                    } else {
+                        console.error('Count not found in response:', data);
+                        document.getElementById('visitor-count').innerText = 'Error';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching visitor count:', error);
+                    document.getElementById('visitor-count').innerText = 'Problem';
+                });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>My Cloud Resume</h1>
+    </header>
+    <main>
+        <section>
+            <h2>About Me</h2>
+            <p>Hello! I'm Jude Wakim, a cloud enthusiast with a passion for web development and cloud technologies. Welcome to my resume page hosted on the cloud!</p>
+        </section>
+        <section>
+            <h2>Skills</h2>
+            <ul>
+                <li>Cloud Computing (AWS, Azure)</li>
+                <li>Web Development (HTML, CSS, JavaScript)</li>
+                <li>Programming (Python, JavaScript)</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Experience</h2>
+            <p>Detail your professional experience here.</p>
+        </section>
+        <section>
+            <h2>Visitor Count</h2>
+            <p>This page has been visited: <span id="visitor-count">Loading...</span></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Jude Wakim. All rights reserved.</p>
+    </footer>
+</body>
+</html> -->
+
+
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Jude Wakim</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+                fetch('https://t50x28c0s5.execute-api.us-east-1.amazonaws.com/prod/visitor-count')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('API response:', data); // Debugging: Log the response data
+                        if (data.count !== undefined) {
+                            document.getElementById('visitor-count').innerText = data.count;
+                        } else {
+                            console.error('Count not found in response:', data);
+                            document.getElementById('visitor-count').innerText = 'Error';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching visitor count:', error);
+                        document.getElementById('visitor-count').innerText = 'Problem';
+                    });
+            });
+        </script>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<h1><a href="index.html">Jude Wakim</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+								<li><a href="#">The Cloud Engineer</a></li>
+								<li><a href="#">The Security Engineer</a></li>
+								<li><a href="#">The FOREX Trader</a></li>
+								<li><a href="blog.html">The Blog</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Banner -->
+					<section id="banner">
+						<div class="inner">
+                            <!-- change the icon -->
+							<div class="logo"><span class="icon fa-gem"></span></div>
+							<h2>This is Jude Wakim</h2>
+							<p>A site created in AWS by yours truly, found <a href="http://html5up.net">here</a></p>
+						</div>
+					</section>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+
+						<!-- One -->
+							<section id="one" class="wrapper spotlight style1">
+								<div class="inner">
+									<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+									<div class="content">
+										<h2 class="major">Jude, The Cloud Engineer</h2>
+										<p>A cloud engineer designs, deploys, and manages cloud-based infrastructure and services, utilizing platforms AWS and Azure. They ensure scalable, efficient, and secure cloud environments by automating processes, optimizing performance, and implementing best practices.</p>
+										<a href="#" class="special">Learn more</a>
+									</div>
+								</div>
+							</section>
+
+							<!-- Two -->
+							<section id="two" class="wrapper spotlight style3">
+								<div class="inner">
+									<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
+									<div class="content">
+										<h2 class="major">Jude, The Security Engineer</h2>
+										<p>A cyber security engingeer designs, implements, and maintains security systems to protect an organization’s networks, data, and digital assets from cyber threats. They also conduct risk assessments, monitor for security breaches, and develop protocols to respond to and mitigate attacks, ensuring the organization’s infrastructure remains secure.</p>
+										<a href="#" class="special">Learn more</a>
+									</div>
+								</div>
+							</section>
+
+						<!-- Three -->
+							<section id="three" class="wrapper alt spotlight style2">
+								<div class="inner">
+									<a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a>
+									<div class="content">
+										<h2 class="major">Jude, The Foreign Exchange Trader</h2>
+										<p>A FOREX trader buys and sells currencies in the foreign exchange market to capitalize on fluctuations in exchange rates. They analyze economic indicators, market trends, and geopolitical events to make informed trading decisions and manage risk.</p>
+										<a href="#" class="special">Learn more</a>
+									</div>
+								</div>
+							</section>
+
+
+
+						<!-- Four -->
+							<section id="four" class="wrapper alt style1">
+								<div class="inner">
+									<h2 class="major">Moments</h2>
+									<p>Cras mattis ante fermentum, malesuada neque vitae, eleifend erat. Phasellus non pulvinar erat. Fusce tincidunt, nisl eget mattis egestas, purus ipsum consequat orci, sit amet lobortis lorem lacus in tellus. Sed ac elementum arcu. Quisque placerat auctor laoreet.</p>
+									<section class="features">
+										<article>
+											<a href="#" class="image"><img src="images/pic04.jpg" alt="" /></a>
+											<h3 class="major">Resume</h3>
+											<p> Cloud Engineer. <br> Available for download.</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic05.jpg" alt="" /></a>
+											<h3 class="major">TKD gallery</h3>
+											<p>TaeKwon Do photo gallery</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic06.jpg" alt="" /></a>
+											<h3 class="major">TradingView</h3>
+											<p>See a collection analytical assessments of charts.</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
+											<h3 class="major">GitHub project</h3>
+											<p>Some projects hosted in repositories for viewing, critqiuing, and building upon.</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+									</section>
+								</div>
+							</section>
+
+					</section>
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="inner">
+							<h2 class="major">Get in touch</h2>
+							<p>Reach out via email or social media to inquire about using, learning, or chatting about providing any service of mentioned above. Messages should include as many details as possible regarding inquiry.</p>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="email" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="4"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+                            <section>
+                                <h2>Visitor Count</h2>
+                                <p>This page has been visited: <span id="visitor-count">Loading...</span></p>
+                            </section>
+							<ul class="contact">
+								<li class="icon solid fa-home">
+									Untitled Inc<br />
+									1234 Somewhere Road Suite #2894<br />
+									Nashville, TN 00000-0000
+								</li>
+								<li class="icon solid fa-phone">(000) 000-0000</li>
+								<li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>
+								<li class="icon brands fa-twitter"><a href="#">twitter.com/untitled-tld</a></li>
+								<li class="icon brands fa-facebook-f"><a href="#">facebook.com/untitled-tld</a></li>
+								<li class="icon brands fa-instagram"><a href="#">instagram.com/untitled-tld</a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

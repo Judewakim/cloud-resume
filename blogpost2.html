@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blogpost2 - Jude Wakim</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Blog Post 2: Bash Scripting for AWS S3</h2>
+								<p>In this blogpost I cover a lesson on bash scripting from an AWS SAA Cert (SAA-C03) YouTube video from CodeCamp. We will learn how to create an s3 bucket, put objects in an s3 bucket, list all the buckets, list the most recently created bucket, list objects in a bucket, delete buckets, delete objects inside of buckets, and sync data to a bucket. All these will be done using bash (bourne again sh) in scripts. <br><br> The first line creates a variable named learningbash and sets it equal to Hello World.<br> The second line prints the value of learningbash out to the console.<br><br><code>learningbash="Hello World"</code><br><code>echo $learningbash</code><br><br>Below is broken up into different scripts that each do a different action in AWS with regard to S3. These are not all the things you can do, there is certainly a ton more you can do but these are guides on how to do some of the more common things. All commands that can be done can be found in the aws documentation, here(s3, basic commands): https://docs.aws.amazon.com/cli/latest/reference/s3/# and here:(s3api, which just has more stuff. You probably wanna use this) https://docs.aws.amazon.com/cli/latest/reference/s3api/ <br></p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+										<h4 class="major">1. Create-Bucket</h4>
+										<p>This action creates an Amazon S3 bucket.<br><br>The first line (<code>#!/usr/bin/env bash</code>) is called a shebang. The shebang just specifies that the script should be run using the Bash shell. The next line just prints to the user whats in between the paranthesis. The next line is comment that explain what goes on next (comments start with # and are not run). The next thing is an if statement that basically says if the user does not enter a bucket name after entering the command to run the script then it prints out the echo and exits the script there. Everything from this point on in the script is if the user did enter a bucket name. The next line (<code>BUCKET_NAME=$1</code>) makes a new variable named BUCKET_NAME and sets the value equal to whatever the user put as the bucket name. The last part of this script actually creates the bucket. It uses the bash cli command <code> s3api create-bucket --bucket $BUCKET_NAME</code> to create the bucket using the bucket name that the user entered. So in order to run this bash cli command to create a bucket you are required to include the bucket name. You can also include, as seen here, a query of the region the bucket is in using the flag <code>--query Location</code> and another flag <code>--output text</code> to format the output that comes back to the user once the bucket is created in just regular text format.</p>
+										<h4>full example</h4>
+										<pre><code>
+#!/usr/bin/env bash
+echo "==create bucket"
+
+#Check for bucket name
+if [ -z "$1" ]; then 
+    echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+    exit 1
+fi
+
+BUCKET_NAME=$1
+
+#https://docs.aws.amazon.com/cli/latest/reference/s3api/create-bucket.html
+aws s3api create-bucket  \
+--bucket  $BUCKET_NAME \
+--query Location \
+--output text
+                                    </code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">2. Delete-Bucket</h4>
+										<p>*This action deletes an Amazon S3 bucket.*<br><br>-The first line (<code>#!/usr/bin/env bash</code>) is called a shebang which is explained in "create-bucket" above. <br>-The next line just prints to the user whats in between the paranthesis. <br>-The next line is comment that explain what goes on next (comments start with # and are not run). <br>-The next thing is an if statement that basically says if the user does not enter a bucket name after entering the command to run the script then it prints out the echo and exits the script there. <br>-Everything from this point on in the script is if the user did enter a bucket name. The next line (<code>BUCKET_NAME=$1</code>) makes a new variable named BUCKET_NAME and sets the value equal to whatever the user put as the bucket name. <br>-The last part of this script actually deletes the bucket. It uses the bash cli command <code> s3api delete-bucket --bucket $BUCKET_NAME</code> to create the bucket using the bucket name that the user entered. So in order to run this bash cli command to create a bucket you are required to include the bucket name. It's extremely similar to the create bucket script and all others.</p>
+										<h4>full example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==delete bucket"
+											
+#Check for bucket name
+if [ -z "$1" ]; then 
+	echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+	exit 1
+fi
+											
+BUCKET_NAME=$1
+											
+#https://docs.aws.amazon.com/cli/latest/reference/s3api/delete-bucket.html
+aws s3api delete-bucket  \
+--bucket  $BUCKET_NAME
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">3. Delete-Objects</h4>
+										<p>*This action deletes objects inside of an S3 bucket. The bash script below lists objects inside the Amazon S3 bucket then deletes them all at once.*<br><br><br>The first line (<code>#!/usr/bin/env bash</code>) is called a shebang which is explained in "create-bucket" above. <br>The next line just prints to the user whats in between the paranthesis. <br>The next line is comment that explain what goes on next (comments start with # and are not run). <br>The next thing is an if statement that basically says if the user does not enter a bucket name after entering the command to run the script then it prints out the echo and exits the script there. <br>Everything from this point on in the script is if the user did enter a bucket name. The next line (<code>BUCKET_NAME=$1</code>) makes a new variable named BUCKET_NAME and sets the value equal to whatever the user put as the bucket name. <br><br>The last part of this script actually lists then deletes the bucket. It uses the bash cli command <code> s3api list-objects-v2 --bucket $BUCKET_NAME --query Contents[].Key | jq -n {Objects: [inputs | .[] | {Key: .}]}' >/tmp/delete_objects.json</code> to list the objects inside of a bucket using the bucket name that the user entered. So in order to run this bash cli command to list all the objects in a bucket that you are required to include the bucket name and here I also added the query flag to return only the keys of the results. Then that result is piped over to jq, a JSON processor which turns the list of objects into JSON format. jq constructs a JSON object where each key is formatted as needed in order to delete them. That last part with the file path redirects the output of the processed JSON to that location.<br><br>Once the list of objects in the bucket is returned in JSON format then its the API to delete the objects' turn. That API requires a bucket flag and a delete flag. The delete flag provides the file path of the json list.</p>
+										<h4>full example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==delete objects"
+											
+#Exit immediately if any command returns a non-zero status
+set -e
+											
+#Check for bucket name
+if [ -z "$1" ]; then 
+	echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+	exit 1
+fi
+											
+BUCKET_NAME=$1
+											
+aws s3api list-objects-v2 \
+--bucket $BUCKET_NAME \
+--query Contents[].Key \
+| jq -n '{Objects: [inputs | .[] | {Key: .}]}' > /tmp/delete_objects.json
+											
+aws s3api delete-objects \
+--bucket $BUCKET_NAME \
+--delete file:///tmp/delete_objects.json
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">4. Get-Newest-Bucket</h4>
+										<p>*This action returns to the user what the most recently created bucket was.*<br><br> The basic command is <code>aws s3api list-buckets</code>. THe rest of it are pipes. The result of <code>aws s3api list-buckets</code> get piped into <code>jq -r .Buckets</code> which [EXPLAIN JQ]. Then the result of the jq gets piped into <code>sort_by(.CreationDate)</code> which clearly sorts the list by creation date. Then that result gets piped into <code>reverse</code> which reverses the order of the list which makes the list most recent to least recent. Then the result of that gets piped into <code>.[0]</code> which returns only the first value in the list (the most recently created bucket.) Then the result gets piped in <code>.Name</code> which returns only the name of the result and nothing else. After all that piping (can also be viewed as filters) only the name of the most recently created bucket is returned to the user who runs this script.</p>
+										<h4>full example</h4>
+										<pre><code>
+=#!/usr/bin/env bash
+=echo "==list newest bucket"
+											
+=# | .[0:5] | 
+=# add this pipe after the reverse pipe
+=# if you want to list top 5 newest buckets
+=aws s3api list-buckets | jq -r '.Buckets | sort_by(.CreationDate) | reverse | .[0] | .Name'
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">list-buckets</h4>
+										<p>*This action returns to the user a list of all the buckets.*<br><br>The command is <code>aws s3api list-buckets</code> and this command will return a list of all of them on the account. In the full script from the full example that command gets piped a few times to refine the list. The first pipe is <code>jq -r '.Buckets</code> so jq is a JSON processor, the <code>-r</code> flag tells jq to output raw strings instead of JSON text, and the <code>'.Buckets</code> extracts the list of buckets from the JSON object. Then that result gets piped into another filter that sorts the list of buckets by the creation date, which is ascending order, oldest to newest. The next pipe reverses it so it now will show newest to oldest. The next pipe which is <code>.[0:5]</code> only shows the newest 5. It needs to be written like this because its a jq slice operation. If it wasnt a jq slice operation you could use <code> | head 5</code>. The next pipe is a jq filter that iterates over each bucket in the list which allows futher processing of each inidividual bucket object. And finally the last pipe <code>.Name</code> just returns the names of the buckets. The echo lines just print to the screen exactly what is in the quotes.</p>
+										<h4>Full Example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==list newest buckets"
+											
+aws s3api list-buckets | jq -r '.Buckets | sort_by(.CreationDate) | reverse | .[0:5] | .[] | .Name'
+echo "..."
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">list-objects</h4>
+										<p>*This action returns to the user a list of all the objects inside of a bucket.*<br><br>This command requires the user to include a bucket name when running the script, something like this: <code>./list-objects.sh /bucket [insert bucket name here]</code>. The first line just prints whats in the quotes to the sreen. The if then statement says if no bucket name is entered, output to the screen "There needs to be a bucket name eg. /bucket my-bucket-name" then exit the script. If the a bucket name is entered it is stored in variable BUCKET_NAME. The last bit of the script is the actual command <code>aws s3api list-objects-v2  --bucket  $BUCKET_NAME</code>. </p>
+										<h4>Full Example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==list objects"
+											
+#Check for bucket name
+if [ -z "$1" ]; then 
+	echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+		exit 1
+fi
+											
+BUCKET_NAME=$1
+											
+#https://docs.aws.amazon.com/cli/latest/reference/s3api/list-objects.html
+aws s3api list-objects-v2  \
+--bucket  $BUCKET_NAME
+									</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">put-objects</h4>
+										<p>*This action takes an object that is stored locally and puts it in the mentioned bucket.*<br><br>The first part of this script checks for a bucket name to be entered following the script just like the list-objects script does. The second bit of the script checks for a filename which should also be entered after the bucket name is entered. When the script is run it should look like this <code>./put-object.sh /bucket [insert bucket name] /body [inset file name]</code>. If either one is missing the corresponding message will be printed to the user and the script will exit. If both are includes they will be stored in the corresponding variables. The OBJECT_KEY variable will also be created. Then the final bit of the script is the actual command, <code>aws s3api put-object --bucket $BUCKET_NAME --key $OBJECT_KEY --body $FILENAME</code>.</p>
+										<h4>Full Example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==put object"
+											
+#Check for bucket name
+if [ -z "$1" ]; then 
+	echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+	exit 1
+fi
+											
+#Check for filename 
+if [ -z "$2" ]; then 
+	echo "There needs to be a filename eg. /body filename"
+	exit 1
+fi
+											
+BUCKET_NAME=$1
+FILENAME=$2
+											
+OBJECT_KEY=$(basename "$FILENAME")
+											
+aws s3api put-object \
+--bucket $BUCKET_NAME \
+--key $OBJECT_KEY \
+--body $FILENAME
+									</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">sync</h4>
+										<p>*The sync action uploads what follows the command to the location that follows that. This script generates a random number of files, stored them locally to a specified location, then syncs those files tothe specified location.*<br><br>This script generates a number of random files with random data, stores them in a local directory, and then syncs that directory with a specified S3 bucket. The <code>set -e</code> line exits the script if any part of the script gives an error, either the whole thing runs or nothing. Next part checks for bucket name list mentioned in list-objects script above. The next part checks for the prefix for the filename. This lets the script where to stored the random files its about to generate, the file path basically. Then it creates some necessary variables, hard codes the output directory location as "/tmp/s3-bash-scripts", and removes any preexisting folders that have the prefix "/tmp/s3-bash-scripts". The <code>-rf</code> flag recurses through the folder and removes all of it. Then it makes a new folder in that prefix location. The last variable stored a random number of files between 5 and 10. Next the file creation loop actually creates the files. First in that loop the file names are created then the <code>dd</code> generates a file filled with random data from /dev/urandom, the file size is also random, between 1 KB and 1 MB which is the <code>bs=1024 count=$((RANDOM % 1024 + 1))</code> part, and the <code>2>/dev/null</code> part suppresses any error messages from the dd command. Next the <code>tree</code> command displays the structure of the output directory. Lastly, the <code>aws s3 sync $OUTPUT_DIR s3://$BUCKET_NAME/files</code> command uploads the contents of the output directory into the S3 bucket.</p>
+										<h4>Full Example</h4>
+										<pre><code>#!/usr/bin/env bash
+echo "==sync"
+											
+#Exit immediately if any command returns a non-zero status
+set -e
+											
+#Check for bucket name
+if [ -z "$1" ]; then 
+	echo "There needs to be a bucket name eg. /bucket my-bucket-name"
+	exit 1
+fi
+											
+#Check for filename prefix
+if [ -z "$2" ]; then 
+	echo "There needs to be a filename prefix eg. /bucket my-bucket-name my-filename-prefix"
+	exit 1
+fi
+											
+BUCKET_NAME=$1
+FILENAME_PREFIX=$2
+											
+#where we'll store these files
+OUTPUT_DIR="/tmp/s3-bash-scripts"
+											
+#remove folder if it already exists
+rm -rf $OUPUT_DIR
+											
+#lets create output folder
+mkdir -p $OUTPUT_DIR
+											
+#generate a random number
+#to determine how many files to create
+NUM_FILES=$((RANDOM % 6 + 5))
+											
+for ((i=1; i<=$NUM_FILES; i++)); do 
+	#generate a random filename
+	FILENAME="$OUTPUT_DIR/${FILENAME_PREFIX}_$i.txt"
+											
+	#generate random data and write it to the file
+	dd if=/dev/urandom of="$FILENAME" bs=1024 count=$((RANDOM % 1024 + 1)) 2>/dev/null
+done
+											
+tree $OUTPUT_DIR
+											
+aws s3 sync $OUTPUT_DIR s3://$BUCKET_NAME/files
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

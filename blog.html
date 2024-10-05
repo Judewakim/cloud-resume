@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blog - Jude Wakim</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">The Blog</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+								<li><a href="generic.html">The Cloud Engineer</a></li>
+								<li><a href="elements.html">The Security Engineer</a></li>
+								<li><a href="#">The FOREX Trader</a></li>
+								<li><a href="blog.html">The Blog</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>My Blog Posts</h2>
+								<p>Each post is about a topic I wanted to reinforce my understanding in. These blogposts are meant to be concise refreshers on topics learned. This page will be used as a repository for information on all topics I feel like expanding upon for one reason or another. These posts will be made at random and will have no structure or organization other than the titles. </p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+										<h3 class="major"><sup><i>linux</i></sup> Linux - Analyzing and Managing Networks [UNDER CONSTRUCTION]</h3>
+                                        <b><a href="blogpost1.html" target="_blank"><strong>>>></strong> BLOGPOST 1: Analyzing and Managing Networks <strong><<<</strong></a></b><br><br>
+										<p>In this blogpost I cover chapter 3 for the Linux Basics for Hackers book, Analyzing and Managing Networks. We learn commands like <code>ifconfig</code>, <code>dig</code>, and <code>dhclient</code>. Click the link above to check it out.</p>
+										<h4>Reference</h4>
+										<blockquote>Linux Basics for Hackers | Getting Started with Networking, Scripting, and Security in Kali<br>by OccupyTheWeb<br>ISBN-10: 1-59327-855-1 | ISBN-13: 978-1-59327-855-7</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code>kali >pwd<br>/root</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+									<section>
+										<h3 class="major"><sup><i>cloud+bash</i></sup> Bash Scripting for AWS S3</h3>
+                                        <b><a href="blogpost2.html" target="_blank"><strong>>>></strong> BLOGPOST 2: <strong><<<</strong></a></b><br><br>
+										<p>In this blogpost I cover a lesson on bash scripting for S3 from an AWS SAA Cert (SAA-C03) YouTube video from CodeCamp including scripts to: create a bucket, delete a bucket, delete objects in a bucket, list the newest bucket, list all the buckets, list objects in a bucket, put objects in a bucket, and sync files to a bucket.</p>
+										<h4>Reference</h4>
+										<blockquote>Andrew Brown - freeCodeCamp.org YouTube channel<br>AWS Solutions Architect Certification (SAA-C03) - Full Course to PASS the Exam
+										</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code>aws s3api create-bucket  \
+--bucket  $BUCKET_NAME \
+--query Location \
+--output text
+										</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+									<section>
+										<h3 class="major"><sup><i>networking</i></sup> OSPF Network Routing Protocol [UNDER CONSTRUCTION]</h3>
+                                        <b><a href="blogpost3.html" target="_blank"><strong>>>></strong> BLOGPOST 3: OSPF <strong><<<</strong></a></b><br><br>
+										<p>In this blogpost, I review Open Shortest Path First Cisco routing protocol. OSPF is a link-state routing protocol used in most switches and routers in modern networks.</p>
+										<h4>Reference</h4>
+										<blockquote>Jermey's IT Lab YouTube Channel<br>Free CCNA | Configuring OSPF | CCNA 200-301 Complete Course</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code>router ospf [process-id]<br>network [ip-address] [wildcard-mask] area [area-id]<br>show ip ospf [process-id]</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+									<section>
+										<h3 class="major"><sup><i>security</i></sup> SQL Injections</h3>
+                                        <b><a href="blogpost4.html" target="_blank"><strong>>>></strong> BLOGPOST 4: SQL Injections<strong><<<</strong></a></b><br><br>
+										<p>In this blogpost I will discuss SQL injection attacks. I cover what they are and why they are used by hackers. </p>
+										<h4>Reference</h4>
+										<blockquote>LetsDefend.io<br>Detecting Web Attacks | Detecting SQL Injection Attacks<br><br>invicti.com<br>SQL injection (SQLi)</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code>Enter UserID:<br>	105 OR 1=1<br><br>SELECT * FROM Users WHERE UserId = 105 OR 1=1;</code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+									<section>
+										<h3 class="major"><sup><i>cloud/forex/arts/other</i></sup> The next blogpost</h3>
+                                        <b><a href="#" target="_blank"><strong>>>></strong> BLOGPOST 3: <strong><<<</strong></a></b><br><br>
+										<p>Summary of the post.</p>
+										<h4>Blockquote</h4>
+										<blockquote>Include quote from the chapter.</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code></code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+									<section>
+										<h3 class="major"><sup><i>cloud/forex/arts/other</i></sup> The next blogpost</h3>
+                                        <b><a href="#" target="_blank"><strong>>>></strong> BLOGPOST 3: <strong><<<</strong></a></b><br><br>
+										<p>Summary of the post.</p>
+										<h4>Blockquote</h4>
+										<blockquote>Include quote from the chapter.</blockquote>
+										<h4>Quick Example</h4>
+										<pre><code></code></pre>
+									</section>
+                                    <br>
+                                    <br>
+                                    <br>
+
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="inner">
+							<ul class="contact">
+								<li class="icon solid fa-home">
+									Untitled Inc<br />
+									1234 Somewhere Road Suite #2894<br />
+									Nashville, TN 00000-0000
+								</li>
+								<li class="icon solid fa-phone">(000) 000-0000</li>
+								<li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>
+								<li class="icon brands fa-twitter"><a href="#">twitter.com/untitled-tld</a></li>
+								<li class="icon brands fa-facebook-f"><a href="#">facebook.com/untitled-tld</a></li>
+								<li class="icon brands fa-instagram"><a href="#">instagram.com/untitled-tld</a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
